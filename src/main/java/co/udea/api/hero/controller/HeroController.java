@@ -1,6 +1,7 @@
 package co.udea.api.hero.controller;
 
 import co.udea.api.hero.model.Hero;
+import co.udea.api.hero.repository.HeroRepository;
 import co.udea.api.hero.service.HeroService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,12 @@ public class HeroController {
     private final Logger log = LoggerFactory.getLogger(HeroController.class);
 
     private final HeroService heroService;
+    private final HeroRepository heroRepository;
 
-    public HeroController(HeroService heroService) {
+    public HeroController(HeroService heroService,
+                          HeroRepository heroRepository) {
         this.heroService = heroService;
+        this.heroRepository = heroRepository;
     }
 
     @GetMapping("{id}")
@@ -50,6 +54,23 @@ public class HeroController {
         return ResponseEntity.ok(heroes);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Hero> updateHero(Hero hero){
+        log.info("Rest request actualizar héroe de id: " + hero.getId());
+        Hero updatedHero = heroService.updateHero(hero);
+        return ResponseEntity.ok(updatedHero);
+    }
 
-
+    @PostMapping("/crear")
+    public ResponseEntity<Hero> addHero(@RequestBody Hero hero){
+        log.info("Rest request agregar el héroe de nombre: "+ hero.getName());
+        Hero newHero = heroService.addHero(hero);
+        return ResponseEntity.ok(newHero);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteHero(@PathVariable Integer id){
+        log.info("Rest request eliminar héroe por id: " + id);
+        heroService.deleteHero(id);
+        return ResponseEntity.noContent().build();
+    }
 }

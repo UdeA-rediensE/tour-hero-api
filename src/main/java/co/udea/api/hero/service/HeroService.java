@@ -1,6 +1,6 @@
 package co.udea.api.hero.service;
 
-import co.udea.api.hero.exception.BusinessException;
+import co.udea.api.hero.exception.DataNotFoundException;
 import co.udea.api.hero.model.Hero;
 import co.udea.api.hero.repository.HeroRepository;
 import org.slf4j.Logger;
@@ -18,25 +18,54 @@ public class HeroService {
 
     private final HeroRepository heroRepository;
 
-    public HeroService(HeroRepository heroRepository){
+    public HeroService(HeroRepository heroRepository) {
         this.heroRepository = heroRepository;
     }
-    public Hero getHero(Integer id){
+
+    public Hero getHero(Integer id) {
         Optional<Hero> optionalHero = heroRepository.findById(id);
-        if(!optionalHero.isPresent()){
-            log.info("No se encuentra un heroe con ID: "+id);
-            throw new BusinessException("El heroe no existe");
+        if (!optionalHero.isPresent()) {
+            log.info("No se encuentra un héroe con ID: " + id);
+            throw new DataNotFoundException("El héroe no existe");
         }
         return optionalHero.get();
     }
 
     public Page<Hero> getHeroes(Pageable pageable) {
-        return heroRepository.findAll(pageable);
+        Page<Hero> heroes = heroRepository.findAll(pageable);
+        if (heroes.isEmpty()) {
+            throw new DataNotFoundException("No se encontraron héroes");
+        }else{
+            return heroes;
+        }
     }
+
     public Page<Hero> searchHeroes(String term, Pageable pageable) {
         return heroRepository.findAllByNameContainingIgnoreCase(term, pageable);
     }
 
+    public Hero updateHero(Hero hero) {
+        Optional<Hero> optionalHero = heroRepository.findById(hero.getId());
+        if (!optionalHero.isPresent()) {
+            log.info("No se encuentra un héroe con ID: " + hero.getId());
+            throw new DataNotFoundException("No se puede actualizar el héroe porque no se encontró en la base de datos");
+        } else {
+            return heroRepository.save(hero);
+        }
+    }
 
+    public Hero addHero(Hero hero) {
+        return heroRepository.save(hero);
+    }
 
+    public void deleteHero(Integer id) {
+        Optional<Hero> optionalHero = heroRepository.findById(id);
+        if (!optionalHero.isPresent()) {
+            log.info("No se encuentra un héroe con ID: " + id);
+            throw new DataNotFoundException("El héroe no existe");
+        } else {
+            heroRepository.deleteById(id);
+        }
+
+    }
 }

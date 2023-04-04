@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice()
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
     @ExceptionHandler({BusinessException.class})
     protected ResponseEntity handleBusinessException(HttpServletRequest request, BusinessException ex) {
@@ -39,6 +39,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             HttpServletRequest request, Throwable ex) {
         //TODO: Enviar correo electrónico con error no manejado
         logger.error(request.getRequestURL().toString(), ex);
-        return new ResponseEntity<>( "No se ha podido procesar su solicitud. Contacte al administrador.", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("No se ha podido procesar su solicitud. Contacte al administrador.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
