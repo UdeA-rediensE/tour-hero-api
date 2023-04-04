@@ -6,8 +6,13 @@ server:
 
 # Spring properties
 spring:
+  data:
+    web:
+      pageable:
+        default-page-size: 10 # Tamaño de página predeterminado
+        max-page-size: 20 # Tamaño máximo de página permitido
   # Dev is active by default. This value can be overwritten by java arg param
   profiles:
-    active: dev
+    active: mysql
   application:
     name: tour-api

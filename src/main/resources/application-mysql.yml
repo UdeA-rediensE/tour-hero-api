@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        jdbc:
+          batch_size: 50
+          lob:
+            non_contextual_creation: true
+          temp:
+            use_jdbc_metadata_defaults: false
+        order_inserts: true
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/tour_of_heroes
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+
+    hikari:
+      idle-timeout: 10000
+      maximum-pool-size: 5
