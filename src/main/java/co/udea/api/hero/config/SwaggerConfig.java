@@ -13,7 +13,7 @@ import springfox.documentation.service.ApiInfo;
 
 @Configuration
 @EnableSwagger2
-@Profile({"mysql"})
+@Profile({"railway"})
 public class SwaggerConfig {
 
     @Bean
