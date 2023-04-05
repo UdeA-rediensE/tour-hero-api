@@ -4,12 +4,7 @@ package co.udea.api.hero.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-
+import javax.persistence.*;
 
 @Entity
 @Table(name = "heroes")
@@ -17,10 +12,10 @@ import jakarta.validation.constraints.NotBlank;
 public class Hero {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "Name is mandatory")
     @Column(name = "name")
     private String name;
 
