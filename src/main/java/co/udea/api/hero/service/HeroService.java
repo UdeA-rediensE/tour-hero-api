@@ -26,8 +26,9 @@ public class HeroService {
         if (!optionalHero.isPresent()) {
             log.info("No se encuentra un héroe con ID: " + id);
             throw new DataNotFoundException("El héroe no existe");
+        } else {
+            return optionalHero.get();
         }
-        return optionalHero.get();
     }
 
     public List<Hero> getHeroes() {
@@ -73,6 +74,5 @@ public class HeroService {
         } else {
             heroRepository.deleteById(id);
         }
-
     }
 }
