@@ -30,9 +30,13 @@ name: SonarCloud analysis
 
 on:
   push:
-    branches: [ "main", " test/sonar-jacoco" ]
+    branches:
+      - main
+      - test/sonar-jacoco
   pull_request:
-    branches: [ "main", "test/sonar-jacoco" ]
+    branches: 
+      - main
+      - test/sonar-jacoco
   workflow_dispatch:
 
 permissions:
