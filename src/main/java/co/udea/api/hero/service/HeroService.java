@@ -5,7 +5,6 @@ import co.udea.api.hero.model.Hero;
 import co.udea.api.hero.repository.HeroRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +15,8 @@ public class HeroService {
 
     private final Logger log = LoggerFactory.getLogger(HeroService.class);
 
-    private HeroRepository heroRepository;
+    private final HeroRepository heroRepository;
 
-    @Autowired
     public HeroService(HeroRepository heroRepository) {
         this.heroRepository = heroRepository;
     }
@@ -32,7 +30,6 @@ public class HeroService {
             return optionalHero.get();
         }
     }
-
 
     public List<Hero> getHeroes() {
         List<Hero> heroes = heroRepository.findAll();
@@ -60,19 +57,20 @@ public class HeroService {
     }
 
     public Hero addHero(Hero hero) {
-        // Verificar si el nombre del hero ya existe
-        if (heroRepository.existsHeroByName(hero.getName())) {
-            throw new IllegalArgumentException("El héroe ya existe en la base de datos.");
+        // Verificar si el objeto tiene un ID asignado
+        if (hero.getName() == null || hero.getName().equals("")) {
+            throw new IllegalArgumentException("El nombre del héroe no puede ser nulo.");
         } else {
             return heroRepository.save(hero);
         }
+
     }
 
     public void deleteHero(Integer id) {
         Optional<Hero> optionalHero = heroRepository.findById(id);
         if (!optionalHero.isPresent()) {
             log.info("No se encuentra un héroe con ID: " + id);
-            throw new IllegalArgumentException("El héroe no existe");
+            throw new DataNotFoundException("El héroe no existe");
         } else {
             heroRepository.deleteById(id);
         }
