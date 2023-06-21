@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface HeroRepository extends JpaRepository<Hero, Integer> {
     List<Hero> findAllByNameContainingIgnoreCase(String name);
+    Hero findByName(String name);
 
 }

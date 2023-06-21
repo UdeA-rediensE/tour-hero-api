@@ -1,7 +1,7 @@
 package co.udea.api.hero.controller;
 
+import co.udea.api.hero.dto.HeroDTO;
 import co.udea.api.hero.model.Hero;
-import co.udea.api.hero.repository.HeroRepository;
 import co.udea.api.hero.service.HeroService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,9 @@ public class HeroController {
     private final Logger log = LoggerFactory.getLogger(HeroController.class);
 
     private final HeroService heroService;
-    private final HeroRepository heroRepository;
 
-    public HeroController(HeroService heroService,
-                          HeroRepository heroRepository) {
+    public HeroController(HeroService heroService) {
         this.heroService = heroService;
-        this.heroRepository = heroRepository;
     }
 
     @GetMapping("{id}")
@@ -42,9 +39,10 @@ public class HeroController {
             @ApiResponse(code = 404, message = "No se encuentra el héroe con el id dado en la base de datos")})
     @ApiImplicitParam(name = "id", value = "ID del héroe a buscar", required = true, example = "1")
 
-    public ResponseEntity<Hero> getHero(@PathVariable Integer id) {
+    public ResponseEntity<HeroDTO> getHero(@PathVariable Integer id) {
         log.info("Request GET /v1/heroes/{} - Buscando héroe por id", id);
-        return ResponseEntity.ok(heroService.getHero(id));
+        HeroDTO heroDto = heroService.getHero(id);
+        return ResponseEntity.ok(heroDto);
     }
 
     @GetMapping("")
@@ -53,10 +51,10 @@ public class HeroController {
             response = Hero.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Héroes encontrados exitosamente. Si la lista está vacía, significa que no hay héroes en la base de datos.")})
-    public ResponseEntity<List<Hero>> getHeroes() {
+    public ResponseEntity<List<HeroDTO>> getHeroes() {
         log.info("Request GET /v1/heroes - Buscando todos los héroes");
-        List<Hero> heroes = heroService.getHeroes();
-        return ResponseEntity.ok(heroes);
+        List<HeroDTO> heroDTOs = heroService.getHeroes();
+        return ResponseEntity.ok(heroDTOs);
     }
 
     @GetMapping(params = "name")
@@ -66,10 +64,10 @@ public class HeroController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Héroes encontrados exitosamente. Si la lista está vacía, significa que no hay héroes que coincidan con el término de búsqueda.")})
     @ApiImplicitParam(name = "name", value = "Término a buscar en el nombre del héroe", required = true, example = "man")
-    public ResponseEntity<List<Hero>> searchHeroes(@RequestParam("name") String term) {
+    public ResponseEntity<List<HeroDTO>> searchHeroes(@RequestParam("name") String term) {
         log.info("Request GET /v1/heroes - Buscando héroes que coincidan con el término '{}'", term);
-        List<Hero> heroes = heroService.searchHeroes(term);
-        return ResponseEntity.ok(heroes);
+        List<HeroDTO> heroDTOs = heroService.searchHeroes(term);
+        return ResponseEntity.ok(heroDTOs);
     }
 
     @PutMapping("")
@@ -79,14 +77,10 @@ public class HeroController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Héroe actualizado exitosamente"),
             @ApiResponse(code = 404, message = "No se encuentra el héroe con el id dado en la base de datos. No se pudo actualizar el héroe.")})
-    public ResponseEntity<Hero> updateHero(@RequestBody Hero hero) {
-        log.info("Request PUT /v1/heroes - Actualizando héroe de id: {}", hero.getId());
-        // Crear una nueva instancia de Hero con el ID del objeto original
-        Hero updatedHero = new Hero(hero.getId(), hero.getName());
-        // Actualizar los datos del objeto
-        updatedHero.setName(hero.getName());
-        updatedHero = heroService.updateHero(updatedHero);
-        return ResponseEntity.ok(updatedHero);
+    public ResponseEntity<HeroDTO> updateHero(@RequestBody HeroDTO heroDto) {
+        log.info("Request PUT /v1/heroes - Actualizando héroe de id: {}", heroDto.getId());
+        HeroDTO updatedHeroDto = heroService.updateHero(heroDto);
+        return ResponseEntity.ok(updatedHeroDto);
     }
 
     @PostMapping("")
@@ -95,10 +89,10 @@ public class HeroController {
             response = Hero.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Héroe agregado exitosamente")})
-    public ResponseEntity<Hero> addHero(@RequestBody Hero hero) {
-        log.info("Request POST /v1/heroes - Agregando héroe de nombre: {} e ID: {}", hero.getName(), hero.getId());
-        Hero newHero = heroService.addHero(hero);
-        return ResponseEntity.ok(newHero);
+    public ResponseEntity<HeroDTO> addHero(@RequestBody HeroDTO heroDto) {
+        log.info("Request POST /v1/heroes - Agregando héroe de nombre: {} e ID: {}", heroDto.getName(), heroDto.getId());
+        HeroDTO newHeroDto = heroService.addHero(heroDto);
+        return ResponseEntity.ok(newHeroDto);
     }
 
     @DeleteMapping("/{id}")
@@ -108,7 +102,7 @@ public class HeroController {
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "No se encuentra el héroe con el id dado en la base de datos. No se pudo eliminar el héroe.")})
     @ApiImplicitParam(name = "id", value = "ID del héroe a eliminar", required = true, example = "5")
-    public ResponseEntity<?> deleteHero(@PathVariable Integer id) {
+    public ResponseEntity<Hero> deleteHero(@PathVariable Integer id) {
         log.info("Request DELETE /v1/heroes/{} - Eliminando héroe por id", id);
         heroService.deleteHero(id);
         return ResponseEntity.noContent().build();

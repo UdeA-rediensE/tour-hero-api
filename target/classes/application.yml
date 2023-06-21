@@ -6,6 +6,9 @@ server:
 
 # Spring properties
 spring:
+  devtools:
+    restart:
+      enabled: 'true'
   # Dev is active by default. This value can be overwritten by java arg param
   profiles:
     active: railway
