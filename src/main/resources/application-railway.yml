@@ -16,9 +16,9 @@ spring:
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://containers-us-west-47.railway.app:6193/railway
-    username: postgres
-    password: RTdu4Ig5pbsNd5EqOrBt
+    url: ${URL_DB}
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
     driver-class-name: org.postgresql.Driver
     hikari:
       idle-timeout: 10000 # 10 seg, tiempo máximo en que una conexión del pool puede estar inactiva
