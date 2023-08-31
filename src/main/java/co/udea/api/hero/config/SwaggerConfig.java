@@ -13,7 +13,7 @@ import springfox.documentation.service.ApiInfo;
 
 @Configuration
 @EnableSwagger2
-@Profile({"railway"})
+@Profile({"dev"})
 public class SwaggerConfig {
 
     @Bean

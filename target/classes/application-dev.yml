@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
   jpa:
     show-sql: true
     hibernate:
@@ -16,11 +19,13 @@ spring:
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/tour_of_heroes
+    url: jdbc:mysql://localhost:3306/heroes_db
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password:
 
     hikari:
-      idle-timeout: 10000
+      idle-timeout: 10000 # 10 seg, tiempo máximo en que una conexión del pool puede estar inactiva
       maximum-pool-size: 5
+      connectionTimeout: 60000 # 60 seg, tiempo de espera para una nueva conexión antes de lanzar el error de conexión
+      maxLifetime: 1800000 # 30 minutos, tiempo máximo que puede estar activa una conexión del pool
