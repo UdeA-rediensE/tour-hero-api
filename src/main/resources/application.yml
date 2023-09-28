@@ -8,6 +8,6 @@ server:
 spring:
   # Dev is active by default. This value can be overwritten by java arg param
   profiles:
-    active: railway
+    active: dev
   application:
     name: tour-api

@@ -45,7 +45,7 @@ public class HeroController {
         return ResponseEntity.ok(heroDto);
     }
 
-    @GetMapping("")
+    @GetMapping("/getAll")
     @ApiOperation(value = "Busca todos los héroes de la base de datos",
             notes = "Este método devuelve una lista de todos los héroes encontrados en la base de datos.",
             response = Hero.class)
