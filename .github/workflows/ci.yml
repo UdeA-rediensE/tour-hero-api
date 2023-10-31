@@ -63,7 +63,7 @@ jobs:
       - run: cat ~/.m2/settings.xml
 
       - name: Publish Artifact to Azure Artifacts
-        run: mvn deploy
+        run: mvn deploy --settings ~/.m2/settings.xml
 
       - name: Save Artifact in GitHub Actions
         run: |
