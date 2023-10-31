@@ -62,18 +62,22 @@ jobs:
 
       - run: cat ~/.m2/settings.xml
 
-      - name: Publish Artifact to Azure Artifacts
-        run: mvn deploy --settings ~/.m2/settings.xml
-
-      - name: Save Artifact in GitHub Actions
-        run: |
-          mkdir artifacts
-          cp target/tour-hero-api-1.0-SNAPSHOT.war artifacts/tour-hero-api-1.0-SNAPSHOT.war
+      - name: Set up Azure Artifacts credentials
+        run: echo "machine dev.azure.com login $AZURE_ARTIFACTS_USERNAME password $AZURE_ARTIFACTS_TOKEN" > ~/.netrc
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AZURE_ARTIFACTS_USERNAME: ${{ secrets.AZURE_ARTIFACTS_USERNAME }}
+          AZURE_ARTIFACTS_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
 
-      - name: Upload Artifact to GitHub Actions
+      - name: Restore packages and Publish packages to Azure Artifacts
+        run: |
+          mvn install
+          mvn deploy
+      - name: Define Artifact Path
+        id: artifact
+        run: echo "::set-output name=artifact_path::target/tour-hero-api-1.0-SNAPSHOT.jar"
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: tour-hero-api
-          path: artifacts/tour-hero-api-1.0-SNAPSHOT.war
+          name: tour-hero-api-artifact
+          path: ${{ steps.artifact.outputs.artifact_path }}
