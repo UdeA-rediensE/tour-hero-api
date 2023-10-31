@@ -32,7 +32,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Install Dependencies
-        run: mvn clean install
+        run: mvn install
 
       # - name: Run Unit and Integration Tests
       #   run: mvn test
@@ -62,22 +62,18 @@ jobs:
 
       - run: cat ~/.m2/settings.xml
 
-      - name: Set up Azure Artifacts credentials
-        run: echo "machine dev.azure.com login $AZURE_ARTIFACTS_USERNAME password $AZURE_ARTIFACTS_TOKEN" > ~/.netrc
-        env:
-          AZURE_ARTIFACTS_USERNAME: ${{ secrets.AZURE_ARTIFACTS_USERNAME }}
-          AZURE_ARTIFACTS_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
+      - name: Publish Artifact to Azure Artifacts
+        run: mvn deploy
 
-      - name: Restore packages and Publish packages to Azure Artifacts
+      - name: Save Artifact in GitHub Actions
         run: |
-          mvn install
-          mvn deploy
-      - name: Define Artifact Path
-        id: artifact
-        run: echo "::set-output name=artifact_path::target/tour-hero-api-1.0-SNAPSHOT.jar"
+          mkdir artifacts
+          cp target/tour-hero-api-1.0-SNAPSHOT.war artifacts/tour-hero-api-1.0-SNAPSHOT.war
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifact
+      - name: Upload Artifact to GitHub Actions
         uses: actions/upload-artifact@v3
         with:
-          name: tour-hero-api-artifact
-          path: ${{ steps.artifact.outputs.artifact_path }}
+          name: tour-hero-api
+          path: artifacts/tour-hero-api-1.0-SNAPSHOT.war
