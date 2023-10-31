@@ -43,8 +43,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
       
-      - run: cat ~/.m2/settings.xml
-
       - name: Modificar settings.xml
         run: |
           echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -61,6 +59,8 @@ jobs:
           </settings>' > ~/.m2/settings.xml
         env:
           AZURE_ARTIFACTS_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
+
+      - run: cat ~/.m2/settings.xml
 
       - name: Publish Artifact to Azure Artifacts
         run: mvn deploy
