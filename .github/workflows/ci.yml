@@ -1,56 +1,57 @@
-name: ci
+name: ci-cd
+
 on:
   push:
     branches:
       - ci-pipeline
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   build:
-    name: Build, Analyze, and Publish
+    name: Build and Analyze
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better relevancy of analysis
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Maven packages
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and analyze
+      - name: Build and Analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
 
-      - name: Deploy artifact
-        env:
-          AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/ProyectoIntegrador2-UdeA/ProyectoIntegradorll/_packaging/Practica1/maven/v1
-          AZURE_ARTIFACTS_REPO_ID: Practica1
-          AZURE_ARTIFACTS_USERNAME: ProyectoIntegrador2-UdeA
-          AZURE_ARTIFACTS_PASSWORD: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
-        run: mvn deploy -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      - name: Restore Maven packages
+        run: mvn install
 
-      - name: Save artifact
-        uses: actions/upload-artifact@v3
+      - name: Publish Maven packages to Azure Artifacts
+        run: mvn deploy
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: tour-of-heroes-api
-          path: target/tour-of-heroes-api-0.0.1-SNAPSHOT.war
+          name: tour-hero-api
+          path: C:\Users\Sneid\Documents\PROYECTOS\TourOfHeroes\tour-of-heroes-api\target\tour-hero-api-1.0-SNAPSHOT.war
