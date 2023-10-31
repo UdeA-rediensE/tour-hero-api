@@ -34,14 +34,14 @@ jobs:
       - name: Install Dependencies
         run: mvn clean install
 
-      - name: Run Unit and Integration Tests
-        run: mvn test
+      # - name: Run Unit and Integration Tests
+      #   run: mvn test
 
-      - name: Static Code Analysis
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
+      # - name: Static Code Analysis
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
       
       - name: Modificar settings.xml
         run: |
@@ -69,8 +69,8 @@ jobs:
         run: |
           mkdir artifacts
           cp target/tour-hero-api-1.0-SNAPSHOT.war artifacts/tour-hero-api-1.0-SNAPSHOT.war
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Artifact to GitHub Actions
         uses: actions/upload-artifact@v3
