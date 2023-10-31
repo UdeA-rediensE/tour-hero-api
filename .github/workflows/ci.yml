@@ -39,9 +39,7 @@ jobs:
       #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
 
       - name: Publish to Repositories
-        run: |
-          mvn deploy --settings ~/.m2/settings.xml
-          mvn deploy --batch-mode --settings ~/.m2/maven_central_settings.xml
+        run: mvn --batch-mode deploy
         env:
           server-id: Practica1
           server-username: ProyectoIntegrador2-UdeA
