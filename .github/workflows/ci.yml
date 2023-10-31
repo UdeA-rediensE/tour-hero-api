@@ -31,10 +31,10 @@ jobs:
       - name: Compile the project
         run: mvn --batch-mode compile
 
-      # - name: Publish package
-      #   run: mvn --batch-mode deploy
-      #   env:
-      #     AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
+      - name: Publish package
+        run: mvn --batch-mode deploy
+        env:
+          AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
 
       - name: Execute Unit Tests
         run: mvn --batch-mode test
@@ -62,11 +62,6 @@ jobs:
 
       # - name: Quality Gates Evaluation
       #   # Add your quality gates evaluation command here
-
-      - name: Publish package
-        run: mvn --batch-mode deploy
-        env:
-          AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
 
       - name: Upload WAR artifact
         uses: actions/upload-artifact@v3
