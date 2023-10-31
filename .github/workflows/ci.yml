@@ -21,26 +21,30 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Install Dependencies
-        run: mvn clean install
-
-      - name: Run Unit and Integration Tests
-        run: mvn test
-
-      # - name: Static Code Analysis
-      #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
-
-      - name: Publish to Repositories
-        run: mvn --batch-mode deploy
-        env:
           server-id: Practica1
           server-username: ProyectoIntegrador2-UdeA
-          server-password: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
+          server-password: AZURE_TOKEN
+      - name: Publish package
+        run: mvn --batch-mode deploy
+        env:
+          AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
+
+      # - name: Cache Maven packages
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      #     restore-keys: ${{ runner.os }}-m2
+
+      # - name: Install Dependencies
+      #   run: mvn clean install
+
+      # - name: Run Unit and Integration Tests
+      #   run: mvn test
+
+      # # - name: Static Code Analysis
+      # #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
+
+      # - name: Publish to Repositories
+      #   run: mvn --batch-mode deploy
+       
