@@ -44,11 +44,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
 
+      - name: Create settings.xml file
+        run: echo "$MAVEN_SETTINGS_XML" > settings.xml
+
       - name: Restore Maven packages
         run: mvn install
 
       - name: Publish Maven packages to Azure Artifacts
-        run: mvn deploy
+        run: mvn deploy --settings settings.xml
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
