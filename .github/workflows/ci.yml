@@ -54,7 +54,7 @@ jobs:
 
       - name: Define Artifact Path
         id: artifact
-        run: echo "::set-output name=artifact_path::target/tour-hero-api-1.0-SNAPSHOT.jar"
+        run: echo "::set-output name=artifact_path::target/tour-hero-api-1.0-SNAPSHOT.war"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3

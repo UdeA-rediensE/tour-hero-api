@@ -42,7 +42,18 @@
             </snapshots>
         </repository>
     </repositories>
-
+    <distributionManagement>
+        <repository>
+            <id>Practica1</id>
+            <url>https://pkgs.dev.azure.com/ProyectoIntegrador2-UdeA/ProyectoIntegradorll/_packaging/Practica1/maven/v1</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
 
