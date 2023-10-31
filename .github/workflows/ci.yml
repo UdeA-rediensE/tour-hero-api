@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
           server-id: Practica1
           server-username: ProyectoIntegrador2-UdeA
-          server-password: AZURE_TOKEN
+          server-password: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}  # Utiliza la variable de entorno AZURE_TOKEN
 
       - name: Install Dependencies
         run: mvn --batch-mode install
@@ -64,8 +64,7 @@ jobs:
           AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
 
       - name: Upload WAR artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: tour-of-hero-artifact  # Nombre de tu artefacto
           path: target/*.war  # Ruta al archivo .war o patrón de búsqueda
-        
