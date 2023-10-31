@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,9 +57,14 @@ class HeroServiceTest {
         // Arrange
         when(heroRepository.findById(hero.getId())).thenReturn(Optional.empty());
 
-        // Act and Assert
-        assertThrows(DataNotFoundException.class, () -> {
+        Exception exception = assertThrows(DataNotFoundException.class, () -> {
             heroService.getHero(hero.getId());
         });
+
+        String expectedMessage = "El héroe no existe";
+        String actualMessage = exception.getMessage();
+
+        // Act and Assert
+        assertEquals(actualMessage, expectedMessage);
     }
 }
