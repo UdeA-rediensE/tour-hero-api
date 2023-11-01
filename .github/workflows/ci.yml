@@ -24,6 +24,8 @@ jobs:
           server-id: Practica1
           server-username: ProyectoIntegrador2-UdeA
           server-password: AZURE_TOKEN  # Utiliza la variable de entorno AZURE_TOKEN
+        
+      - run: cat ~/.m2/settings.xml
 
       - name: Clean project
         run: mvn clean
