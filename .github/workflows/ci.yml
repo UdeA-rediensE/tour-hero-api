@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on:
   push:
@@ -25,22 +25,13 @@ jobs:
           server-username: ProyectoIntegrador2-UdeA
           server-password: AZURE_TOKEN  # Utiliza la variable de entorno AZURE_TOKEN
 
-      - name: Install Dependencies
-        run: mvn --batch-mode install
-
-      - name: Compile the project
-        run: mvn --batch-mode compile
+      - name: Clean project
+        run: mvn clean
 
       - name: Publish package
         run: mvn --batch-mode deploy
         env:
           AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
-
-      - name: Execute Unit Tests
-        run: mvn --batch-mode test
-
-      # - name: Execute Integration Tests
-      #   # Add your integration test command here
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
@@ -48,12 +39,14 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
