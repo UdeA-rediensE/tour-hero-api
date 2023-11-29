@@ -16,7 +16,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>tour-hero-api</name>
     <description>Api tour of hero</description>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

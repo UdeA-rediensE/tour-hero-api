@@ -1,0 +1,40 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: [ "CI Pipeline" ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: Practica1
+          server-username: ProyectoIntegrador2-UdeA
+          server-password: AZURE_TOKEN  # Utiliza la variable de entorno AZURE_TOKEN
+
+      - name: Publish package
+        run: mvn --batch-mode deploy -DskipTests
+        env:
+          AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: tour-of-hero-artifact  # Nombre de tu artefacto
+          path: target
+
+#      - name: Deploy to Production
+#        run: |
+#          # Lógica de despliegue a producción
