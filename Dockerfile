@@ -1,5 +1,5 @@
 # Usar una imagen base con JDK 17 y Maven
-FROM maven:3.8.4-openjdk-17 AS build
+FROM maven:3.9.4-openjdk-17 AS build
 
 # Establecer un directorio de trabajo
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . /app
 RUN mvn clean package
 
 # Crear una nueva imagen basada en OpenJDK 17
-FROM openjdk:17-jre-slim-buster
+FROM openjdk:17-slim-buster
 
 # Exponer el puerto que utilizará la aplicación
 EXPOSE 8080
