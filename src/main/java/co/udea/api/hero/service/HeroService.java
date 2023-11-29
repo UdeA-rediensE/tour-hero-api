@@ -29,7 +29,7 @@ public class HeroService {
 
     public HeroDTO getHero(Integer id) {
         Optional<Hero> optionalHero = heroRepository.findById(id);
-        if (!optionalHero.isPresent()) {
+        if (optionalHero.isEmpty()) {
             log.info(HERO_NOT_FOUND, id);
             throw new DataNotFoundException("El héroe no existe");
         } else {
