@@ -63,4 +63,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: tour-of-hero-artifact  # Nombre de tu artefacto
-          path: target/*.war  # Ruta al archivo .war o patrón de búsqueda
+          path: target/*.jar  # Ruta al archivo .war o patrón de búsqueda
