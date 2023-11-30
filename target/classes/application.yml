@@ -11,3 +11,6 @@ spring:
     active: dev
   application:
     name: tour-api
+  devtools:
+    livereload:
+      enabled: false
