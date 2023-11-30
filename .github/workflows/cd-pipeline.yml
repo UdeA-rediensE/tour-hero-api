@@ -29,6 +29,8 @@ jobs:
         env:
           AZURE_TOKEN: ${{ secrets.AZURE_ARTIFACTS_TOKEN }}
 
-#      - name: Deploy to Production
-#        run: |
-#          # Lógica de despliegue a producción
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: tour-of-hero-artifact  # Nombre de tu artefacto
+          path: target

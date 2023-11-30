@@ -52,7 +52,7 @@ public class HeroController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Héroes encontrados exitosamente. Si la lista está vacía, significa que no hay héroes en la base de datos.")})
     public ResponseEntity<List<HeroDTO>> getHeroes() {
-        log.info("Request GET /v1/heroes - Buscando todos los héroes");
+        log.info("Request GET /v1/heroes/getAll - Buscando todos los héroes");
         List<HeroDTO> heroDTOs = heroService.getHeroes();
         return ResponseEntity.ok(heroDTOs);
     }

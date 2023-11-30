@@ -24,6 +24,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set up Environment Variables
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "USERNAME_DB=${{ secrets.USERNAME_DB }}" >> $GITHUB_ENV
+          echo "PASSWORD_DB=${{ secrets.PASSWORD_DB }}" >> $GITHUB_ENV
+
+
       - name: Clean project
         run: mvn clean
 
@@ -49,3 +58,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=esn8der_tour-of-heroes-api
+
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tour-of-hero-artifact  # Nombre de tu artefacto
+          path: target/*.war  # Ruta al archivo .war o patrón de búsqueda
